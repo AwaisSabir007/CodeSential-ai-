@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,7 +14,7 @@
   body {
     background-color: var(--bg-main);
     color: #F9FAFB;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Poppins', system-ui, sans-serif;
   }
 }
 
@@ -44,7 +46,9 @@
 }
 .glow-card:hover {
   border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 30px -8px rgba(99, 102, 241, 0.25);
+  ring-width: 1px;
+  --tw-ring-color: rgba(99, 102, 241, 0.3);
 }
 
 /* Recharts dark theme overrides */
@@ -54,4 +58,57 @@
 }
 .recharts-tooltip-wrapper {
   outline: none;
+}
+
+@layer utilities {
+  /* Minilist card system */
+  .card {
+    @apply rounded-2xl bg-[#111827] border border-white/[0.08] p-6 backdrop-blur-sm;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply rounded-full bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 text-sm font-medium transition-all duration-200 active:scale-95;
+  }
+  .btn-secondary {
+    @apply rounded-full border border-white/15 hover:bg-white/5 text-gray-300 hover:text-white px-5 py-2 text-sm font-medium transition-all duration-200;
+  }
+
+  /* Input style */
+  .input {
+    @apply rounded-xl bg-white/5 border border-white/10 text-white text-sm px-4 py-2.5 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 transition-all;
+  }
+
+  /* Badge / pill */
+  .badge {
+    @apply rounded-full px-3 py-0.5 text-xs font-medium;
+  }
+
+  /* Section label */
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-widest text-gray-500;
+  }
+
+  /* Panel border utility */
+  .panel-border {
+    @apply border border-white/[0.06];
+  }
+
+  /* Card row - lighter inner row tint */
+  .card-row {
+    background: rgba(26, 34, 54, 0.6);
+  }
+
+  /* Nav active state - left-border minilist pattern */
+  .nav-active {
+    @apply border-l-2 border-indigo-400 bg-indigo-600/15 text-white;
+  }
+
+  /* Shadow utilities */
+  .shadow-glow-success {
+    box-shadow: 0 0 20px -4px rgba(16, 185, 129, 0.3);
+  }
+  .shadow-glow {
+    box-shadow: 0 0 20px -3px rgba(99, 102, 241, 0.25);
+  }
 }
