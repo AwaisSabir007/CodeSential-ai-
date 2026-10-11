@@ -1,0 +1,26 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "WebSocket infrastructure: add a FastAPI WebSocket endpoint at /api/v1/ws/events, create the frontend WSClient singleton service (wsClient.ts), and wire liveEvents/wsConnected state plus initWebSocket() into the Zustand appStore. This feature is a prerequisite for FEAT-002 because LiveMonitoring.tsx imports liveEvents and wsConnected from the store, and the store imports wsClient.ts.",
+  "status": "completed",
+  "steps": [
+    "Create /Users/macbookpro/Desktop/work/codesential ai/backend/api/routes/ws.py: import WebSocket, WebSocketDisconnect from fastapi; module-level `connected_clients: Set[WebSocket] = set()`; `router = APIRouter(prefix='/ws', tags=['websocket'])`; @router.websocket('/events') handler that accepts, adds client, sends {type:'connected', message:'CodeSentinel live stream ready'}, loops receive_text(), removes on WebSocketDisconnect; `async def broadcast(event: dict)` that iterates connected_clients.copy() and removes dead sockets on any exception.",
+    "Modify /Users/macbookpro/Desktop/work/codesential ai/backend/main.py: inside create_app() in the 'Include routers' block, add `from backend.api.routes import ws` and `app.include_router(ws.router, prefix='/api/v1')` after the system.router line.",
+    "Create /Users/macbookpro/Desktop/work/codesential ai/apps/desktop/src/services/wsClient.ts: export WsEvent interface (type union + optional project_id, data, message, timestamp fields); WSClient class with url, socket, handlers array, reconnectDelay=1000, maxDelay=30000, stopped flag; connect() method with onmessage/onopen/onclose/onerror handlers including exponential backoff reconnect; onMessage(handler) method that also calls connect() if socket is closed; disconnect() that sets stopped=true and closes; export singleton `export const wsClient = new WSClient('ws://127.0.0.1:8765/api/v1/ws/events')`.",
+    "Modify /Users/macbookpro/Desktop/work/codesential ai/apps/desktop/src/stores/appStore.ts: (a) Add imports `import { WsEvent, wsClient } from '../services/wsClient';` at top. (b) Add to AppState interface: `liveEvents: WsEvent[]`, `wsConnected: boolean`, `initWebSocket: () => void`, `fetchFindings: (projectId: string) => Promise<void>`. (c) Add initial values `liveEvents: []`, `wsConnected: false`. (d) Add `fetchFindings` action that calls api.getFindings(projectId) and sets findings. (e) Add `initWebSocket` action that calls wsClient.onMessage with a handler: ws_connected→set wsConnected:true, ws_disconnected→set wsConnected:false, otherwise prepend to liveEvents (cap 100), and on scan_completed fetch findings+scans for activeProject. (f) At the end of the try block in fetchInitialData, call `get().initWebSocket()`."
+  ],
+  "acceptance_criteria": [
+    "backend/api/routes/ws.py exists and imports without error: `python -c 'from backend.api.routes.ws import router; print(OK)'` prints OK",
+    "backend/main.py imports the ws router and registers it: `python -c 'from backend.main import app; print(OK)'` prints OK",
+    "apps/desktop/src/services/wsClient.ts exists and exports WsEvent interface and wsClient singleton",
+    "apps/desktop/src/stores/appStore.ts exports liveEvents, wsConnected, initWebSocket, fetchFindings in AppState",
+    "`cd apps/desktop && npx tsc --noEmit` exits 0 with zero error lines after all four files are in place"
+  ],
+  "verification": [
+    "cd \"/Users/macbookpro/Desktop/work/codesential ai\" && python -c \"from backend.api.routes.ws import router; print('OK')\"",
+    "cd \"/Users/macbookpro/Desktop/work/codesential ai\" && python -c \"from backend.main import app; print('OK')\"",
+    "cd \"/Users/macbookpro/Desktop/work/codesential ai/apps/desktop\" && npx tsc --noEmit 2>&1"
+  ],
+  "blocked_reason": null,
+  "findings": "All four files are in place and verified. Key facts for FEAT-002: (1) WsEvent interface is exported from apps/desktop/src/services/wsClient.ts — import as `import { WsEvent } from '../services/wsClient'` in any page that needs it. (2) appStore now exposes `liveEvents: WsEvent[]`, `wsConnected: boolean`, `initWebSocket: () => void`, and `fetchFindings: (projectId: string) => Promise<void>` — destructure from `useAppStore()` in LiveMonitoring.tsx. (3) The backend WebSocket endpoint is live at ws://127.0.0.1:8765/api/v1/ws/events. (4) broadcast() in backend/api/routes/ws.py can be called from scan service to push events to all connected clients. (5) TypeScript strict-mode check passes (npx tsc --noEmit exits 0)."
+}
