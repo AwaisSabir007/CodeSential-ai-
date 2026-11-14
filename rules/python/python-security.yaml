@@ -1,0 +1,152 @@
+rules:
+  - id: codesentinel.python.sql-injection-format
+    message: SQL query is built with string formatting or concatenation. Use parameterized queries instead.
+    severity: ERROR
+    languages: [python]
+    metadata:
+      cwe: CWE-89
+      category: security
+      confidence: HIGH
+      owasp: "A03:2021 Injection"
+    pattern-either:
+      - pattern: $DB.execute(f"...", ...)
+      - pattern: $DB.execute("..." % $ARGS, ...)
+      - pattern: $DB.execute("...".format(...), ...)
+      - pattern: $DB.execute("..." + $X, ...)
+      - pattern: $DB.executemany(f"...", ...)
+      - pattern: $DB.executemany("..." % $ARGS, ...)
+
+  - id: codesentinel.python.command-injection-os-system
+    message: Shell command is built from dynamic input. Use subprocess with a list of arguments and shell=False.
+    severity: ERROR
+    languages: [python]
+    metadata:
+      cwe: CWE-78
+      category: security
+      confidence: HIGH
+      owasp: "A03:2021 Injection"
+    pattern-either:
+      - pattern: os.system(f"...")
+      - pattern: os.system("..." + $X)
+      - pattern: os.system($X + "...")
+      - pattern: os.system("..." % $X)
+      - pattern: os.system("...".format(...))
+      - pattern: os.popen(f"...")
+      - pattern: os.popen("..." + $X)
+      - pattern: os.popen("..." % $X)
+
+  - id: codesentinel.python.subprocess-shell-true
+    message: subprocess call with shell=True enables shell injection if any argument contains user input.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      cwe: CWE-78
+      category: security
+      confidence: MEDIUM
+    pattern: subprocess.$FUNC(..., shell=True, ...)
+
+  - id: codesentinel.python.dangerous-eval-exec
+    message: eval/exec on a dynamic expression allows arbitrary code execution.
+    severity: ERROR
+    languages: [python]
+    metadata:
+      cwe: CWE-95
+      category: security
+      confidence: HIGH
+    patterns:
+      - pattern-either:
+          - pattern: eval($X)
+          - pattern: exec($X)
+      - pattern-not: eval("...")
+      - pattern-not: exec("...")
+
+  - id: codesentinel.python.unsafe-pickle-load
+    message: Deserializing untrusted data with pickle allows arbitrary code execution. Use JSON for network data.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      cwe: CWE-502
+      category: security
+      confidence: MEDIUM
+    pattern-either:
+      - pattern: pickle.loads(...)
+      - pattern: pickle.load(...)
+
+  - id: codesentinel.python.unsafe-yaml-load
+    message: yaml.load without SafeLoader can execute arbitrary Python objects. Use yaml.safe_load.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      cwe: CWE-502
+      category: security
+      confidence: HIGH
+    pattern: yaml.load($X)
+
+  - id: codesentinel.python.tls-verification-disabled
+    message: TLS certificate verification is disabled (verify=False), enabling man-in-the-middle attacks.
+    severity: ERROR
+    languages: [python]
+    metadata:
+      cwe: CWE-295
+      category: security
+      confidence: HIGH
+    pattern: requests.$FUNC(..., verify=False, ...)
+
+  - id: codesentinel.python.flask-debug-enabled
+    message: Flask debug mode exposes the Werkzeug debugger (remote code execution) in production.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      cwe: CWE-489
+      category: security
+      confidence: MEDIUM
+    pattern: $APP.run(..., debug=True, ...)
+
+  - id: codesentinel.python.weak-hash-md5-sha1
+    message: MD5/SHA1 are cryptographically broken. Use SHA-256+ or bcrypt/argon2 for passwords.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      cwe: CWE-327
+      category: security
+      confidence: MEDIUM
+    pattern-either:
+      - pattern: hashlib.md5(...)
+      - pattern: hashlib.sha1(...)
+
+  - id: codesentinel.python.hardcoded-credential
+    message: Possible hardcoded credential. Load secrets from environment variables or a secret manager.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      cwe: CWE-798
+      category: security
+      confidence: MEDIUM
+    patterns:
+      - pattern: $KEY = "..."
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i).*(password|passwd|secret|api_?key|auth_?token|access_?token|private_?key).*
+      - pattern-not: $KEY = ""
+
+  - id: codesentinel.python.jwt-signature-not-verified
+    message: JWT decoded without signature verification — tokens can be forged.
+    severity: ERROR
+    languages: [python]
+    metadata:
+      cwe: CWE-347
+      category: security
+      confidence: HIGH
+    pattern-either:
+      - pattern: jwt.decode(..., verify=False, ...)
+      - pattern: 'jwt.decode(..., options={..., "verify_signature": False, ...}, ...)'
+
+  - id: codesentinel.python.insecure-tempfile-mktemp
+    message: tempfile.mktemp is race-condition prone. Use tempfile.NamedTemporaryFile or mkstemp.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      cwe: CWE-377
+      category: security
+      confidence: HIGH
+    pattern: tempfile.mktemp(...)

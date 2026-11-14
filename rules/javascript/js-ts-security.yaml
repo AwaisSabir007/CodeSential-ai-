@@ -1,0 +1,129 @@
+rules:
+  - id: codesentinel.js.dangerous-eval
+    message: eval() on a dynamic expression allows arbitrary code execution.
+    severity: ERROR
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-95
+      category: security
+      confidence: HIGH
+    patterns:
+      - pattern: eval($X)
+      - pattern-not: eval("...")
+
+  - id: codesentinel.js.new-function-constructor
+    message: new Function() compiles strings into code at runtime, equivalent to eval.
+    severity: WARNING
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-95
+      category: security
+      confidence: MEDIUM
+    pattern: new Function(...)
+
+  - id: codesentinel.js.command-injection-exec
+    message: Shell command built from dynamic input. Use execFile/spawn with an argument array.
+    severity: ERROR
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-78
+      category: security
+      confidence: HIGH
+      owasp: "A03:2021 Injection"
+    pattern-either:
+      - pattern: $CP.exec(`...${$X}...`, ...)
+      - pattern: $CP.exec($A + $B, ...)
+      - pattern: $CP.execSync(`...${$X}...`, ...)
+      - pattern: $CP.execSync($A + $B, ...)
+      - pattern: exec(`...${$X}...`, ...)
+      - pattern: execSync(`...${$X}...`, ...)
+
+  - id: codesentinel.js.sql-injection-template
+    message: SQL query built with template literals or concatenation. Use parameterized queries.
+    severity: ERROR
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-89
+      category: security
+      confidence: HIGH
+      owasp: "A03:2021 Injection"
+    pattern-either:
+      - pattern: $DB.query(`...${$X}...`, ...)
+      - pattern: $DB.query($A + $B, ...)
+      - pattern: $DB.execute(`...${$X}...`, ...)
+      - pattern: $DB.raw(`...${$X}...`, ...)
+
+  - id: codesentinel.js.innerhtml-dynamic
+    message: Assigning dynamic content to innerHTML enables XSS. Use textContent or sanitize with DOMPurify.
+    severity: ERROR
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-79
+      category: security
+      confidence: MEDIUM
+      owasp: "A03:2021 Injection"
+    patterns:
+      - pattern-either:
+          - pattern: $EL.innerHTML = $X
+          - pattern: $EL.outerHTML = $X
+      - pattern-not: $EL.innerHTML = "..."
+      - pattern-not: $EL.outerHTML = "..."
+
+  - id: codesentinel.js.document-write-dynamic
+    message: document.write with dynamic content enables XSS.
+    severity: WARNING
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-79
+      category: security
+      confidence: MEDIUM
+    patterns:
+      - pattern: document.write($X)
+      - pattern-not: document.write("...")
+
+  - id: codesentinel.js.dangerously-set-inner-html
+    message: dangerouslySetInnerHTML renders raw HTML. Sanitize the value with DOMPurify first.
+    severity: WARNING
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-79
+      category: security
+      confidence: MEDIUM
+    pattern-regex: dangerouslySetInnerHTML=\{\{\s*__html
+
+  - id: codesentinel.js.weak-hash-md5-sha1
+    message: MD5/SHA1 are cryptographically broken. Use SHA-256+ or bcrypt/argon2 for passwords.
+    severity: WARNING
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-327
+      category: security
+      confidence: MEDIUM
+    pattern-either:
+      - pattern: $C.createHash("md5")
+      - pattern: $C.createHash("sha1")
+
+  - id: codesentinel.js.cors-wildcard-origin
+    message: CORS origin set to '*'. Use an explicit allowlist of trusted domains.
+    severity: WARNING
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-942
+      category: security
+      confidence: MEDIUM
+    pattern-regex: 'origin:\s*[''"]\*[''"]'
+
+  - id: codesentinel.js.hardcoded-credential
+    message: Possible hardcoded credential. Load secrets from environment variables server-side.
+    severity: WARNING
+    languages: [javascript, typescript]
+    metadata:
+      cwe: CWE-798
+      category: security
+      confidence: MEDIUM
+    patterns:
+      - pattern: $KEY = "..."
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i).*(password|passwd|secret|api_?key|auth_?token|access_?token|private_?key).*
+      - pattern-not: $KEY = ""

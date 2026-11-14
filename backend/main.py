@@ -131,7 +131,16 @@ def create_app() -> FastAPI:
         return JSONResponse(status_code=400, content={"error": str(exc)})
 
     # Include routers
-    from backend.api.routes import findings, investigations, models, patches, projects, providers, scans, system
+    from backend.api.routes import (
+        findings,
+        investigations,
+        models,
+        patches,
+        projects,
+        providers,
+        scans,
+        system,
+    )
 
     app.include_router(projects.router, prefix="/api/v1")
     app.include_router(scans.router, prefix="/api/v1")
@@ -190,11 +199,11 @@ def serve(host: str, port: int, reload: bool):
 def scan(project_path: str, scanners: tuple):
     """Scan a project directory from the command line."""
     import asyncio
-    from pathlib import Path
+
     from backend.core.security import validate_project_path
     from backend.database.session import create_tables
-    from backend.scanners.registry import ScannerRegistry
     from backend.scanners.base import ScanContext
+    from backend.scanners.registry import ScannerRegistry
 
     async def _run():
         configure_logging()
