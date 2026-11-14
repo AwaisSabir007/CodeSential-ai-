@@ -1,0 +1,144 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Backend: lint + full test suite (unit + integration + e2e)
+  # ---------------------------------------------------------------------------
+  backend:
+    name: Backend tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install backend + dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Install scanner tools (best-effort; app degrades gracefully if missing)
+        shell: bash
+        run: |
+          pip install bandit pip-audit || true
+
+      - name: Ruff lint
+        run: ruff check backend ml
+
+      - name: Run test suite
+        run: python -m pytest tests/ -q
+
+  # ---------------------------------------------------------------------------
+  # Frontend: type-check + production build
+  # ---------------------------------------------------------------------------
+  frontend:
+    name: Frontend build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/desktop
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+      - run: npm ci
+      - name: Type-check
+        run: npx tsc --noEmit
+      - name: Production build
+        run: npm run build
+
+  # ---------------------------------------------------------------------------
+  # Desktop installers: PyInstaller sidecar + Tauri bundle, per OS.
+  # Runs on tags (releases) and manual dispatch to keep normal CI fast.
+  # ---------------------------------------------------------------------------
+  package:
+    name: Package desktop app (${{ matrix.os }})
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Linux system deps for Tauri
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Build backend sidecar (PyInstaller)
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e "." pyinstaller
+          pyinstaller --clean -y --onefile \
+            --name codesentinel-backend \
+            --distpath packaging/dist --workpath packaging/build --specpath packaging \
+            --paths "$PWD" \
+            --hidden-import sqlalchemy.dialects.sqlite.aiosqlite \
+            --hidden-import aiosqlite \
+            packaging/sidecar_entry.py
+
+      - name: Place sidecar with target triple
+        shell: bash
+        run: |
+          mkdir -p apps/desktop/src-tauri/binaries
+          TRIPLE=$(rustc -vV | sed -n 's/host: //p')
+          EXT=""; [ "${{ runner.os }}" = "Windows" ] && EXT=".exe"
+          cp "packaging/dist/codesentinel-backend${EXT}" \
+             "apps/desktop/src-tauri/binaries/codesentinel-backend-${TRIPLE}${EXT}"
+
+      - name: Install frontend deps
+        working-directory: apps/desktop
+        run: npm ci
+
+      - name: Build Tauri bundle
+        working-directory: apps/desktop
+        run: npm run tauri build
+
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: codesentinel-${{ matrix.os }}
+          path: |
+            apps/desktop/src-tauri/target/release/bundle/**/*.dmg
+            apps/desktop/src-tauri/target/release/bundle/**/*.msi
+            apps/desktop/src-tauri/target/release/bundle/**/*.exe
+            apps/desktop/src-tauri/target/release/bundle/**/*.AppImage
+            apps/desktop/src-tauri/target/release/bundle/**/*.deb
+          if-no-files-found: ignore
