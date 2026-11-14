@@ -100,10 +100,10 @@ export const Optimization: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">
-            Code Optimization, Algorithmic & GPU Analysis
+          <h1 className="text-xl font-semibold text-gray-900">
+            Code Optimization, Algorithmic &amp; GPU Analysis
           </h1>
-          <p className="text-sm text-gray-400 font-light mt-0.5">
+          <p className="text-sm text-gray-500 mt-0.5">
             Real-time AST time complexity analysis, space efficiency, memory allocations, and PyTorch / GPU hardware bottlenecks.
           </p>
         </div>
@@ -119,15 +119,15 @@ export const Optimization: React.FC = () => {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-4 gap-5">
-        <div className="card glow-card hover:scale-[1.01]">
-          <div className="text-xs text-gray-400 flex items-center justify-between">
+        <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:border-gray-300 transition-colors">
+          <div className="flex items-center justify-between">
             <span className="section-label">Average Cyclomatic CC</span>
-            <Activity className="w-4 h-4 text-indigo-400" />
+            <Activity className="w-4 h-4 text-gray-400" />
           </div>
-          <div className="text-xl font-semibold text-white font-mono mt-2">
+          <div className="text-xl font-semibold text-gray-900 font-mono mt-2">
             {data ? `${data.average_cyclomatic_complexity}` : '---'}
           </div>
-          <div className="text-[10px] text-gray-400 mt-1">
+          <div className="text-[10px] text-gray-500 mt-1">
             {data && data.average_cyclomatic_complexity <= 5
               ? 'Low Branching Risk'
               : data && data.average_cyclomatic_complexity <= 10
@@ -136,51 +136,51 @@ export const Optimization: React.FC = () => {
           </div>
         </div>
 
-        <div className="card glow-card hover:scale-[1.01]">
-          <div className="text-xs text-gray-400 flex items-center justify-between">
+        <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:border-gray-300 transition-colors">
+          <div className="flex items-center justify-between">
             <span className="section-label">Maintainability Index</span>
-            <TrendingUp className="w-4 h-4 text-emerald-400" />
+            <TrendingUp className="w-4 h-4 text-gray-400" />
           </div>
-          <div className="text-xl font-semibold text-emerald-400 font-mono mt-2">
+          <div className="text-xl font-semibold text-gray-900 font-mono mt-2">
             {data ? `${data.maintainability_index} / 100` : '---'}
           </div>
-          <div className="text-[10px] text-gray-400 mt-1">
+          <div className="text-[10px] text-gray-500 mt-1">
             {data && data.maintainability_index >= 70
               ? 'Grade A (Highly Maintainable)'
               : 'Grade B (Refactoring Recommended)'}
           </div>
         </div>
 
-        <div className="card glow-card hover:scale-[1.01]">
-          <div className="text-xs text-gray-400 flex items-center justify-between">
+        <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:border-gray-300 transition-colors">
+          <div className="flex items-center justify-between">
             <span className="section-label">Complexity Hotspots</span>
-            <Flame className="w-4 h-4 text-amber-400" />
+            <Flame className="w-4 h-4 text-gray-400" />
           </div>
-          <div className="text-xl font-semibold text-amber-400 font-mono mt-2">
+          <div className="text-xl font-semibold text-gray-900 font-mono mt-2">
             {data ? `${data.hotspots.length} Detected` : '---'}
           </div>
-          <div className="text-[10px] text-gray-400 mt-1">
+          <div className="text-[10px] text-gray-500 mt-1">
             Across {data?.total_functions_analyzed || 0} functions in {data?.total_files_analyzed || 0} files
           </div>
         </div>
 
-        <div className="card glow-card hover:scale-[1.01]">
-          <div className="text-xs text-gray-400 flex items-center justify-between">
+        <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:border-gray-300 transition-colors">
+          <div className="flex items-center justify-between">
             <span className="section-label">GPU / Deep Learning</span>
-            <Cpu className="w-4 h-4 text-purple-400" />
+            <Cpu className="w-4 h-4 text-gray-400" />
           </div>
-          <div className="text-xl font-semibold text-purple-400 font-mono mt-2">
+          <div className="text-xl font-semibold text-gray-900 font-mono mt-2">
             {data ? `${data.gpu_optimization_count} Targets` : '---'}
           </div>
-          <div className="text-[10px] text-gray-400 mt-1">
-            CUDA / PyTorch tensor & pipeline optimizations
+          <div className="text-[10px] text-gray-500 mt-1">
+            CUDA / PyTorch tensor &amp; pipeline optimizations
           </div>
         </div>
       </div>
 
       {/* Time Complexity Distribution Banner */}
       {data && (
-        <div className="p-6 rounded-2xl bg-[#111827] border border-white/[0.08] backdrop-blur-sm">
+        <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
           <div className="section-label mb-3">
             Algorithmic Time Complexity Profile
           </div>
@@ -192,11 +192,11 @@ export const Optimization: React.FC = () => {
                   key={key}
                   className={`p-2.5 rounded-lg border ${
                     isHigh && count > 0
-                      ? 'bg-amber-950/20 border-amber-500/30 text-amber-300'
-                      : 'bg-white/[0.02] border-white/[0.05] text-gray-300'
+                      ? 'bg-amber-50 border-amber-100 text-amber-700'
+                      : 'bg-gray-50 border-gray-100 text-gray-700'
                   }`}
                 >
-                  <div className="text-xs font-bold">{key}</div>
+                  <div className="text-xs font-semibold">{key}</div>
                   <div className="text-sm font-semibold mt-0.5">{count} functions</div>
                 </div>
               );
@@ -209,17 +209,17 @@ export const Optimization: React.FC = () => {
       <div className="grid grid-cols-12 gap-6">
         {/* Hotspots List */}
         <div className="col-span-5 space-y-3">
-          <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-            <Zap className="w-4 h-4 text-amber-400" />
+          <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            <Zap className="w-4 h-4 text-gray-400" />
             Detected Hotspots ({data?.hotspots.length || 0})
           </h2>
 
           {!data || data.hotspots.length === 0 ? (
-            <div className="p-8 text-center rounded-2xl bg-[#111827] border border-white/[0.08]">
-              <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-2">
-                <CheckCircle className="w-6 h-6 text-emerald-400" />
+            <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
+              <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-2">
+                <CheckCircle className="w-6 h-6 text-gray-400" />
               </div>
-              <div className="text-base font-medium text-white">Optimal Performance</div>
+              <div className="text-base font-medium text-gray-900">Optimal Performance</div>
               <p className="text-sm text-gray-500 mt-1">
                 No high cyclomatic complexity, quadratic iterations, or GPU bottleneck patterns detected.
               </p>
@@ -229,28 +229,28 @@ export const Optimization: React.FC = () => {
               <div
                 key={idx}
                 onClick={() => setSelectedHotspot(hs)}
-                className={`p-3.5 rounded-xl border cursor-pointer transition-all duration-200 ${
+                className={`p-3.5 rounded-xl border cursor-pointer transition-colors ${
                   selectedHotspot === hs
-                    ? 'bg-indigo-950/30 border-indigo-500/50 shadow-glow'
-                    : 'bg-[#111827] border-white/[0.08] hover:border-white/15'
+                    ? 'bg-white border-gray-900 shadow-sm'
+                    : 'bg-white border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-white">{hs.function}</span>
+                  <span className="text-xs font-mono font-semibold text-gray-900">{hs.function}</span>
                   <span
-                    className={`badge border text-[10px] font-semibold uppercase ${
+                    className={`badge text-[10px] border ${
                       hs.category === 'gpu_optimization'
-                        ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                        ? 'bg-purple-50 text-purple-700 border-purple-100'
                         : hs.severity === 'high'
-                        ? 'bg-red-500/10 text-red-400 border-red-500/20'
-                        : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                        ? 'bg-red-50 text-red-700 border-red-100'
+                        : 'bg-amber-50 text-amber-700 border-amber-100'
                     }`}
                   >
                     {hs.time_complexity}
                   </span>
                 </div>
-                <div className="text-[11px] text-gray-400 font-mono mt-1">{hs.file}</div>
-                <p className="text-xs text-gray-300 mt-2 line-clamp-2">{hs.issue}</p>
+                <div className="text-[11px] text-gray-500 font-mono mt-1">{hs.file}</div>
+                <p className="text-xs text-gray-600 mt-2 line-clamp-2">{hs.issue}</p>
               </div>
             ))
           )}
@@ -259,15 +259,15 @@ export const Optimization: React.FC = () => {
         {/* Selected Hotspot Deep Dive Panel */}
         <div className="col-span-7">
           {selectedHotspot ? (
-            <div className="p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-white/[0.05]">
+            <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
                 <div>
-                  <h3 className="text-sm font-bold text-white font-mono">{selectedHotspot.function}</h3>
-                  <div className="text-xs text-gray-400 font-mono mt-0.5">{selectedHotspot.file}</div>
+                  <h3 className="text-sm font-semibold text-gray-900 font-mono">{selectedHotspot.function}</h3>
+                  <div className="text-xs text-gray-500 font-mono mt-0.5">{selectedHotspot.file}</div>
                 </div>
                 <button
                   onClick={() => handleInvestigateHotspot(selectedHotspot)}
-                  className="btn-primary shadow-glow"
+                  className="btn-primary"
                 >
                   Investigate AI
                 </button>
@@ -275,28 +275,28 @@ export const Optimization: React.FC = () => {
 
               {/* Badges Bar */}
               <div className="flex items-center gap-2 flex-wrap text-[11px]">
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] text-gray-300 border border-white/[0.08] font-mono">
-                  Time: <strong className="text-amber-400">{selectedHotspot.time_complexity}</strong>
+                <span className="px-2.5 py-1 rounded-lg bg-gray-50 text-gray-700 border border-gray-100 font-mono">
+                  Time: <strong className="text-amber-600">{selectedHotspot.time_complexity}</strong>
                 </span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] text-gray-300 border border-white/[0.08] font-mono">
-                  Space: <strong className="text-indigo-400">{selectedHotspot.space_complexity}</strong>
+                <span className="px-2.5 py-1 rounded-lg bg-gray-50 text-gray-700 border border-gray-100 font-mono">
+                  Space: <strong className="text-gray-900">{selectedHotspot.space_complexity}</strong>
                 </span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] text-gray-300 border border-white/[0.08] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-gray-50 text-gray-700 border border-gray-100 font-mono">
                   Cyclomatic CC: <strong>{selectedHotspot.cyclomatic}</strong>
                 </span>
               </div>
 
               {/* Issue & Hardware Impact */}
               <div className="space-y-2">
-                <div className="text-xs text-gray-300 leading-relaxed bg-white/[0.03] p-3 rounded-lg border border-white/[0.05]">
-                  <strong className="text-white block mb-1">Issue Diagnosis:</strong>
+                <div className="text-xs text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-lg border border-gray-100">
+                  <strong className="text-gray-900 block mb-1">Issue Diagnosis:</strong>
                   {selectedHotspot.issue}
                 </div>
 
                 {selectedHotspot.hardware_impact && (
-                  <div className="text-xs text-purple-300 leading-relaxed bg-purple-950/20 p-3 rounded-lg border border-purple-500/20">
-                    <strong className="text-purple-200 block mb-1 flex items-center gap-1.5">
-                      <Cpu className="w-3.5 h-3.5 text-purple-400" />
+                  <div className="text-xs text-gray-600 leading-relaxed bg-purple-50 p-3 rounded-lg border border-purple-100">
+                    <strong className="text-gray-900 block mb-1 flex items-center gap-1.5">
+                      <Cpu className="w-3.5 h-3.5 text-gray-400" />
                       Hardware / GPU Architecture Impact:
                     </strong>
                     {selectedHotspot.hardware_impact}
@@ -306,30 +306,32 @@ export const Optimization: React.FC = () => {
 
               {/* Before & After Refactoring Code Preview */}
               <div className="space-y-3">
-                <div className="text-xs font-semibold text-gray-300">Recommended Code Refactor</div>
+                <div className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider">
+                  Recommended Code Refactor
+                </div>
 
                 {selectedHotspot.after_code && (
                   <div>
-                    <div className="text-[10px] text-emerald-400 font-semibold mb-1 uppercase tracking-wider">
+                    <div className="text-[10px] text-emerald-600 font-semibold mb-1 uppercase tracking-wider">
                       Optimized Replacement (Drop-in):
                     </div>
-                    <pre className="p-3 bg-[#0B1020] rounded-lg border border-emerald-500/30 font-mono text-xs text-emerald-300 overflow-x-auto">
+                    <pre className="p-3 bg-gray-50 rounded-lg border border-emerald-100 font-mono text-xs text-gray-700 overflow-x-auto">
                       {selectedHotspot.after_code}
                     </pre>
                   </div>
                 )}
 
-                <div className="text-xs text-indigo-300 bg-indigo-950/20 p-3 rounded-lg border border-indigo-500/20 flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                <div className="text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200 flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="block text-white mb-0.5">Engineering Rationale:</strong>
+                    <strong className="text-gray-900 block mb-0.5">Engineering Rationale:</strong>
                     {selectedHotspot.optimization}
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="p-12 text-center rounded-2xl bg-[#111827] border border-white/[0.08] text-gray-500 text-xs">
+            <div className="bg-white border border-gray-200 rounded-xl p-12 text-center text-gray-400 text-xs">
               Select a hotspot on the left to inspect time complexity, space usage, and hardware acceleration diffs.
             </div>
           )}

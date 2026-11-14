@@ -35,75 +35,75 @@ export const LiveMonitoring: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">Live Filesystem Monitoring</h1>
-          <p className="text-sm text-gray-400 font-light mt-0.5">
+          <h1 className="text-xl font-semibold text-gray-900">Live Filesystem Monitoring</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
             Observing local files for writes, renames, and deletions with debounced SHA-256 change
             detection.
           </p>
         </div>
         <div className="flex items-center gap-2">
           {wsConnected ? (
-            <>
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-xs font-semibold text-emerald-400">Stream Online</span>
-            </>
+            <span className="bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs px-3 py-1 rounded-lg flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              Stream Online
+            </span>
           ) : (
-            <>
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
-              <span className="text-xs font-semibold text-amber-400">Connecting...</span>
-            </>
+            <span className="text-amber-500 text-xs font-medium flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+              Connecting...
+            </span>
           )}
         </div>
       </div>
 
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-5">
-        <div className="card hover:scale-[1.01]">
-          <div className="text-xs text-gray-400 section-label">Watchdog Status</div>
-          <div className="text-base font-semibold text-white mt-2 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+        <div className="card">
+          <div className="section-label">Watchdog Status</div>
+          <div className="text-base font-semibold text-gray-900 mt-2 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
             {activeProject?.is_monitored ? 'Active Observer' : 'Idle / Paused'}
           </div>
         </div>
 
-        <div className="card hover:scale-[1.01]">
-          <div className="text-xs text-gray-400 section-label">Debounce Window</div>
-          <div className="text-base font-semibold text-white mt-2 font-mono">1.5s Coalesced</div>
+        <div className="card">
+          <div className="section-label">Debounce Window</div>
+          <div className="text-base font-semibold text-gray-900 mt-2 font-mono">1.5s Coalesced</div>
         </div>
 
-        <div className="card hover:scale-[1.01]">
-          <div className="text-xs text-gray-400 section-label">Queue Processing</div>
-          <div className="text-base font-semibold text-white mt-2 font-mono">0 Backlog Items</div>
+        <div className="card">
+          <div className="section-label">Queue Processing</div>
+          <div className="text-base font-semibold text-gray-900 mt-2 font-mono">0 Backlog Items</div>
         </div>
       </div>
 
       {/* Events Stream Panel */}
-      <div className="p-6 rounded-2xl bg-[#111827] border border-white/[0.08] backdrop-blur-sm">
-        <h2 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-          <Activity className="w-4 h-4 text-indigo-400" />
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+        <h2 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <Activity className="w-4 h-4 text-gray-400" />
           Recent Filesystem Events
         </h2>
         <div className="space-y-2">
           {liveEvents.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 gap-3">
-              <span className="w-12 h-12 rounded-full bg-indigo-500/10 flex items-center justify-center">
-                <Activity className="w-6 h-6 text-indigo-400" />
+              <span className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                <Activity className="w-6 h-6 text-gray-400" />
               </span>
-              <p className="text-base font-medium text-white">No Events Yet</p>
+              <p className="text-base font-medium text-gray-900">No Events Yet</p>
               <p className="text-sm text-gray-500">Waiting for filesystem events…</p>
             </div>
           ) : (
             liveEvents.slice(0, 50).map((evt, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/10 flex items-center justify-between transition-all duration-200"
+                className="p-3.5 rounded-lg bg-gray-50 border border-gray-100 hover:border-gray-200 flex items-center justify-between transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <span
                     className={`w-2 h-2 rounded-full flex-shrink-0 ${dotColor(evt.type)}`}
                   />
                   <div>
-                    <span className="text-xs font-mono text-gray-200">
+                    <span className="text-xs font-mono text-gray-700">
                       {(evt.data?.file as string) || evt.message || evt.type}
                     </span>
                     <div className="text-[10px] text-gray-400 uppercase tracking-wide mt-0.5">

@@ -27,57 +27,53 @@ export const Settings: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">Platform Settings</h1>
-          <p className="text-sm text-gray-400 font-light mt-0.5">
+          <h1 className="text-xl font-semibold text-gray-900">Platform Settings</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
             Configure LLM providers, privacy boundaries, scanner sensitivities, and local execution thresholds.
           </p>
         </div>
         <button
           onClick={handleSave}
-          className="btn-primary flex items-center gap-2 shadow-glow"
+          className="btn-primary flex items-center gap-2"
         >
-          {savedSuccess ? <Check className="w-4 h-4 text-emerald-400" /> : null}
+          {savedSuccess ? <Check className="w-4 h-4 text-white" /> : null}
           {savedSuccess ? 'Settings Saved' : 'Save Configuration'}
         </button>
       </div>
 
       {/* Privacy Guard (Local-First Guarantee) */}
       <div className="card space-y-4">
-        <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-          <Lock className="w-4 h-4 text-emerald-400" />
-          Developer Privacy & Local-First Boundaries
+        <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+          <Lock className="w-4 h-4 text-gray-400" />
+          Developer Privacy &amp; Local-First Boundaries
         </h2>
-        <div className="flex items-center justify-between p-3.5 bg-white/[0.03] rounded-xl border border-white/[0.08]">
+        <div className="flex items-center justify-between p-3.5 bg-gray-50 rounded-xl border border-gray-100">
           <div className="space-y-0.5">
-            <div className="text-xs font-semibold text-white">
+            <div className="text-xs font-semibold text-gray-900">
               Cloud Source Code Transmission Consent
             </div>
-            <p className="text-[11px] text-gray-400">
+            <p className="text-[11px] text-gray-500">
               When disabled, private repository source code will NEVER leave localhost. Only Ollama and local models run.
             </p>
           </div>
-          {/* Styled toggle switch */}
-          <label className="relative inline-flex items-center cursor-pointer ml-4">
-            <input
-              type="checkbox"
-              checked={allowCloudCode}
-              onChange={(e) => setAllowCloudCode(e.target.checked)}
-              className="sr-only peer"
-            />
-            <div className="w-10 h-5 rounded-full bg-white/10 border border-white/15 peer-checked:bg-indigo-600 transition-all duration-200 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:rounded-full after:bg-white after:transition-all after:duration-200 peer-checked:after:translate-x-5" />
-          </label>
+          <button
+            onClick={() => setAllowCloudCode(!allowCloudCode)}
+            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ml-4 ${allowCloudCode ? 'bg-gray-900' : 'bg-gray-200'}`}
+          >
+            <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${allowCloudCode ? 'translate-x-[18px]' : 'translate-x-[2px]'}`} />
+          </button>
         </div>
       </div>
 
       {/* LLM Routing Architecture */}
       <div className="card space-y-4">
-        <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-          <Cpu className="w-4 h-4 text-indigo-400" />
+        <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+          <Cpu className="w-4 h-4 text-gray-400" />
           LLM Provider Orchestration
         </h2>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1">Routing Mode</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">Routing Mode</label>
             <select
               value={routingMode}
               onChange={(e) => setRoutingMode(e.target.value)}
@@ -92,7 +88,7 @@ export const Settings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Ollama Model Identifier
             </label>
             <input
@@ -107,13 +103,13 @@ export const Settings: React.FC = () => {
 
       {/* Filesystem Watchdog Settings */}
       <div className="card space-y-4">
-        <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-          <Server className="w-4 h-4 text-amber-400" />
-          Watchdog & Resource Scheduling
+        <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+          <Server className="w-4 h-4 text-gray-400" />
+          Watchdog &amp; Resource Scheduling
         </h2>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Debounce Window (Seconds)
             </label>
             <input
@@ -128,7 +124,7 @@ export const Settings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Max Agent Tool Budget
             </label>
             <input

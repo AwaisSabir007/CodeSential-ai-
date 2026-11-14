@@ -77,8 +77,8 @@ export const Projects: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">Monitored Projects</h1>
-          <p className="text-sm text-gray-400 font-light mt-0.5">
+          <h1 className="text-xl font-semibold text-gray-900">Monitored Projects</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
             Register local repositories to enable filesystem watching, debouncing, and automated scanning.
           </p>
         </div>
@@ -93,7 +93,7 @@ export const Projects: React.FC = () => {
           </button>
           <button
             onClick={() => setShowAddModal(true)}
-            className="btn-primary flex items-center gap-2 shadow-glow"
+            className="btn-primary flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Add Project
@@ -104,9 +104,9 @@ export const Projects: React.FC = () => {
       {/* Projects List */}
       <div className="grid grid-cols-1 gap-5">
         {projects.length === 0 ? (
-          <div className="p-12 text-center rounded-2xl bg-[#111827] border border-white/[0.08]">
-            <FolderSearch className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <h3 className="text-base font-medium text-white">No Projects Configured</h3>
+          <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
+            <FolderSearch className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <h3 className="text-base font-medium text-gray-900">No Projects Configured</h3>
             <p className="text-sm text-gray-500 max-w-sm mx-auto mt-1">
               Add your repository directory to begin real-time code change detection and automated security analysis.
             </p>
@@ -115,18 +115,18 @@ export const Projects: React.FC = () => {
           projects.map((p) => (
             <div
               key={p.id}
-              className="p-6 rounded-2xl bg-[#111827] border border-white/[0.08] flex items-center justify-between glow-card hover:scale-[1.01] transition-all duration-200 backdrop-blur-sm"
+              className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:border-gray-300 transition-colors flex items-center justify-between"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-3">
-                  <h3 className="text-sm font-semibold text-white">{p.name}</h3>
+                  <h3 className="text-sm font-semibold text-gray-900">{p.name}</h3>
                   {p.is_monitored ? (
-                    <span className="badge flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="badge bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       Live Watchdog
                     </span>
                   ) : (
-                    <span className="badge bg-gray-800 text-gray-400 border border-white/5">
+                    <span className="badge bg-gray-100 text-gray-500 border border-gray-200">
                       Paused
                     </span>
                   )}
@@ -138,7 +138,7 @@ export const Projects: React.FC = () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => triggerScan(p.id, 1)}
-                  className="p-2 rounded-full bg-white/[0.05] hover:bg-white/10 text-gray-300 hover:text-white transition-all duration-200"
+                  className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-colors"
                   title="Run Scan"
                 >
                   <Play className="w-4 h-4" />
@@ -146,7 +146,7 @@ export const Projects: React.FC = () => {
                 {p.is_monitored ? (
                   <button
                     onClick={() => stopMonitoring(p.id)}
-                    className="p-2 rounded-full bg-white/[0.05] hover:bg-white/10 text-amber-400 transition-all duration-200"
+                    className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-amber-600 transition-colors"
                     title="Pause Monitoring"
                   >
                     <Pause className="w-4 h-4" />
@@ -154,7 +154,7 @@ export const Projects: React.FC = () => {
                 ) : (
                   <button
                     onClick={() => startMonitoring(p.id)}
-                    className="p-2 rounded-full bg-white/[0.05] hover:bg-white/10 text-emerald-400 transition-all duration-200"
+                    className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-colors"
                     title="Start Monitoring"
                   >
                     <Eye className="w-4 h-4" />
@@ -162,7 +162,7 @@ export const Projects: React.FC = () => {
                 )}
                 <button
                   onClick={() => setProjectToDelete(p)}
-                  className="p-2 rounded-full bg-white/[0.05] hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-all duration-200"
+                  className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors"
                   title="Delete Project"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -175,12 +175,12 @@ export const Projects: React.FC = () => {
 
       {/* Add Project Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-xl flex items-center justify-center z-50 p-4">
-          <div className="w-full max-w-md bg-[#111827] border border-white/10 rounded-3xl p-6 shadow-2xl">
-            <h2 className="text-base font-bold text-white mb-4">Register New Project</h2>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl p-6 shadow-xl">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Register New Project</h2>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1">Project Name</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Project Name</label>
                 <input
                   type="text"
                   value={name}
@@ -192,14 +192,14 @@ export const Projects: React.FC = () => {
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-medium text-gray-300">
+                  <label className="block text-xs font-medium text-gray-700">
                     Project Directory Path
                   </label>
                   <button
                     type="button"
                     onClick={handleBrowseFolder}
                     disabled={isBrowsing}
-                    className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-medium"
+                    className="text-xs text-gray-500 hover:text-gray-900 flex items-center gap-1 font-medium"
                   >
                     <FolderSearch className="w-3.5 h-3.5" />
                     {isBrowsing ? 'Selecting...' : 'Select Folder'}
@@ -235,7 +235,7 @@ export const Projects: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn-primary shadow-glow disabled:opacity-50"
+                  className="btn-primary disabled:opacity-50"
                 >
                   Register Project
                 </button>
@@ -247,26 +247,26 @@ export const Projects: React.FC = () => {
 
       {/* Delete Confirmation Modal */}
       {projectToDelete && (
-        <div className="fixed inset-0 bg-black/75 backdrop-blur-xl flex items-center justify-center z-50 p-4">
-          <div className="w-full max-w-sm bg-[#111827] border border-red-500/30 rounded-3xl p-6 shadow-2xl space-y-4">
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="w-full max-w-sm bg-white border border-gray-200 rounded-2xl p-6 shadow-xl space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400">
+              <div className="p-2.5 rounded-lg bg-red-50 border border-red-100 text-red-600">
                 <Trash2 className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white">Remove Project</h3>
-                <p className="text-xs text-gray-400">Remove from monitoring & scan queue</p>
+                <h3 className="text-sm font-semibold text-gray-900">Remove Project</h3>
+                <p className="text-xs text-gray-500">Remove from monitoring &amp; scan queue</p>
               </div>
             </div>
 
-            <div className="p-3 bg-white/[0.03] rounded-2xl border border-white/[0.08] space-y-1">
-              <div className="text-xs font-semibold text-white">{projectToDelete.name}</div>
-              <div className="text-[11px] text-gray-400 font-mono truncate">
+            <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 space-y-1">
+              <div className="text-xs font-semibold text-gray-900">{projectToDelete.name}</div>
+              <div className="text-[11px] text-gray-500 font-mono truncate">
                 {projectToDelete.root_path || projectToDelete.path}
               </div>
             </div>
 
-            <p className="text-xs text-gray-300 leading-relaxed">
+            <p className="text-xs text-gray-600 leading-relaxed">
               Are you sure you want to delete this project? All associated security findings and scan histories will be cleaned.
             </p>
 
@@ -283,7 +283,7 @@ export const Projects: React.FC = () => {
                 type="button"
                 onClick={confirmDelete}
                 disabled={isDeleting}
-                className="rounded-full bg-red-600 hover:bg-red-500 text-xs font-semibold text-white px-5 py-2 shadow-glow transition-all duration-200 active:scale-95 disabled:opacity-50"
+                className="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg px-5 py-2 transition-colors disabled:opacity-50"
               >
                 {isDeleting ? 'Removing...' : 'Yes, Delete Project'}
               </button>

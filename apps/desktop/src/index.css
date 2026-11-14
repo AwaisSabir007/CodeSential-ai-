@@ -1,114 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --bg-main: #0B1020;
-    --surface-main: #111827;
-    --border-main: rgba(255, 255, 255, 0.08);
-  }
-
-  body {
-    background-color: var(--bg-main);
-    color: #F9FAFB;
-    font-family: 'Poppins', system-ui, sans-serif;
-  }
+  :root { --bg-main: #fafafa; }
+  body { background-color: var(--bg-main); color: #111827; font-family: 'Poppins', system-ui, sans-serif; }
 }
 
-/* Custom Cybernetic Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #0B1020;
-}
-::-webkit-scrollbar-thumb {
-  background: #1F2937;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #6366F1;
-}
-
-/* Subtle glowing cybernetic accent utilities */
-.glass-panel {
-  background: rgba(17, 24, 39, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-.glow-card {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.glow-card:hover {
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 0 30px -8px rgba(99, 102, 241, 0.25);
-  ring-width: 1px;
-  --tw-ring-color: rgba(99, 102, 241, 0.3);
-}
-
-/* Recharts dark theme overrides */
-.recharts-cartesian-axis-tick-value {
-  fill: #9ca3af !important;
-  font-size: 10px;
-}
-.recharts-tooltip-wrapper {
-  outline: none;
-}
+/* Light scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #f9fafb; }
+::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
 
 @layer utilities {
-  /* Minilist card system */
-  .card {
-    @apply rounded-2xl bg-[#111827] border border-white/[0.08] p-6 backdrop-blur-sm;
-  }
-
-  /* Button styles */
-  .btn-primary {
-    @apply rounded-full bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 text-sm font-medium transition-all duration-200 active:scale-95;
-  }
-  .btn-secondary {
-    @apply rounded-full border border-white/15 hover:bg-white/5 text-gray-300 hover:text-white px-5 py-2 text-sm font-medium transition-all duration-200;
-  }
-
-  /* Input style */
-  .input {
-    @apply rounded-xl bg-white/5 border border-white/10 text-white text-sm px-4 py-2.5 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 transition-all;
-  }
-
-  /* Badge / pill */
-  .badge {
-    @apply rounded-full px-3 py-0.5 text-xs font-medium;
-  }
-
-  /* Section label */
-  .section-label {
-    @apply text-xs font-semibold uppercase tracking-widest text-gray-500;
-  }
-
-  /* Panel border utility */
-  .panel-border {
-    @apply border border-white/[0.06];
-  }
-
-  /* Card row - lighter inner row tint */
-  .card-row {
-    background: rgba(26, 34, 54, 0.6);
-  }
-
-  /* Nav active state - left-border minilist pattern */
-  .nav-active {
-    @apply border-l-2 border-indigo-400 bg-indigo-600/15 text-white;
-  }
-
-  /* Shadow utilities */
-  .shadow-glow-success {
-    box-shadow: 0 0 20px -4px rgba(16, 185, 129, 0.3);
-  }
-  .shadow-glow {
-    box-shadow: 0 0 20px -3px rgba(99, 102, 241, 0.25);
-  }
+  .card { @apply bg-white border border-gray-200 rounded-xl p-5 shadow-sm; }
+  .btn-primary { @apply bg-gray-900 hover:bg-gray-800 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors; }
+  .btn-secondary { @apply bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-lg px-4 py-2 text-sm font-medium transition-colors; }
+  .btn-danger { @apply bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-lg px-4 py-2 text-sm font-medium transition-colors; }
+  .input { @apply bg-white border border-gray-200 rounded-lg text-gray-900 text-sm px-3 py-2 focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-200 transition-all; }
+  .badge { @apply rounded-md px-2 py-0.5 text-xs font-medium; }
+  .section-label { @apply text-xs font-medium text-gray-400 uppercase tracking-wider; }
+  .nav-active { @apply border-l-2 border-gray-900 bg-gray-100 text-gray-900 font-medium; }
+  .card-row { @apply hover:bg-gray-50 border-b border-gray-100 last:border-0 transition-colors; }
+  .shadow-glow { box-shadow: none; }
+  .shadow-glow-success { box-shadow: none; }
+  .glass-panel { @apply bg-white border border-gray-200; }
+  .glow-card { @apply transition-colors; }
 }
+
+/* Recharts light theme */
+.recharts-cartesian-axis-tick-value { fill: #9ca3af !important; font-size: 10px; font-family: 'Poppins', sans-serif; }
+.recharts-tooltip-wrapper { outline: none; }

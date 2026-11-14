@@ -37,7 +37,6 @@ export const ModelInsights: React.FC = () => {
     }
   };
 
-  // Build chart data from metrics, with fallbacks matching the original table
   const chartData = [
     {
       metric: 'Accuracy',
@@ -71,15 +70,23 @@ export const ModelInsights: React.FC = () => {
     },
   ];
 
+  const tooltipStyle = {
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
+    borderRadius: '8px',
+    color: '#111827',
+    fontSize: 11,
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">
+          <h1 className="text-xl font-semibold text-gray-900">
             Neural Model Insights (ANN / Deep Learning)
           </h1>
-          <p className="text-sm text-gray-400 font-light mt-0.5">
+          <p className="text-sm text-gray-500 mt-0.5">
             Empirical evaluation and ablation study of the fine-tuned CodeBERT transformer vulnerability
             classifier.
           </p>
@@ -89,29 +96,29 @@ export const ModelInsights: React.FC = () => {
       {/* Model Architecture Specifications */}
       <div className="grid grid-cols-4 gap-5">
         <div className="card">
-          <div className="text-xs text-gray-400 section-label">Backbone Model</div>
-          <div className="text-sm font-bold text-indigo-400 font-mono mt-2">
+          <div className="section-label">Backbone Model</div>
+          <div className="text-sm font-semibold text-gray-900 font-mono mt-2">
             microsoft/codebert-base
           </div>
         </div>
 
         <div className="card">
-          <div className="text-xs text-gray-400 section-label">Classification Head</div>
-          <div className="text-sm font-bold text-white font-mono mt-2">
+          <div className="section-label">Classification Head</div>
+          <div className="text-sm font-semibold text-gray-900 font-mono mt-2">
             Dense + Dropout (0.2) + Softmax
           </div>
         </div>
 
         <div className="card">
-          <div className="text-xs text-gray-400 section-label">Training Loss</div>
-          <div className="text-sm font-bold text-white font-mono mt-2">
+          <div className="section-label">Training Loss</div>
+          <div className="text-sm font-semibold text-gray-900 font-mono mt-2">
             Cross-Entropy + Imbalance Weights
           </div>
         </div>
 
         <div className="card">
-          <div className="text-xs text-gray-400 section-label">Inference Device</div>
-          <div className="text-sm font-bold text-emerald-400 font-mono mt-2">
+          <div className="section-label">Inference Device</div>
+          <div className="text-sm font-semibold text-emerald-600 font-mono mt-2">
             Local CPU / MPS Accelerated
           </div>
         </div>
@@ -119,11 +126,11 @@ export const ModelInsights: React.FC = () => {
 
       {/* Ablation Study — Grouped Bar Chart */}
       <div className="card">
-        <h2 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
-          <BarChart2 className="w-4 h-4 text-indigo-400" />
+        <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
+          <BarChart2 className="w-4 h-4 text-gray-400" />
           Academic Ablation Study Comparison
         </h2>
-        <p className="text-xs text-gray-400 mb-4">
+        <p className="text-xs text-gray-500 mb-4">
           Comparative benchmark across 3 progressive architecture baselines on labeled vulnerability
           datasets.
         </p>
@@ -131,7 +138,7 @@ export const ModelInsights: React.FC = () => {
         <div className="overflow-x-auto">
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={chartData} margin={{ top: 4, right: 16, left: -8, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1F2937" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
               <XAxis
                 dataKey="metric"
                 tick={{ fill: '#9ca3af', fontSize: 11 }}
@@ -147,18 +154,12 @@ export const ModelInsights: React.FC = () => {
               />
               <Tooltip
                 formatter={(v: number) => v + '%'}
-                contentStyle={{
-                  backgroundColor: '#1F2937',
-                  border: 'none',
-                  borderRadius: '8px',
-                  color: '#fff',
-                  fontSize: 11,
-                }}
+                contentStyle={tooltipStyle}
               />
-              <Legend wrapperStyle={{ fontSize: 11, color: '#9ca3af' }} />
-              <Bar dataKey="Baseline A" fill="#64748b" radius={[3, 3, 0, 0]} />
-              <Bar dataKey="Baseline B" fill="#6366f1" radius={[3, 3, 0, 0]} />
-              <Bar dataKey="Baseline C" fill="#10b981" radius={[3, 3, 0, 0]} />
+              <Legend wrapperStyle={{ fontSize: 11, color: '#6b7280' }} />
+              <Bar dataKey="Baseline A" fill="#111827" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="Baseline B" fill="#6b7280" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="Baseline C" fill="#9ca3af" radius={[3, 3, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -167,14 +168,14 @@ export const ModelInsights: React.FC = () => {
       {/* Interactive Inference Playground */}
       <div className="card space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-            <BrainCircuit className="w-4 h-4 text-indigo-400" />
+          <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            <BrainCircuit className="w-4 h-4 text-gray-400" />
             Real-Time Neural Inference Playground
           </h2>
           <button
             onClick={handleRunInference}
             disabled={isInferring}
-            className="btn-primary flex items-center gap-2 shadow-glow disabled:opacity-50"
+            className="btn-primary flex items-center gap-2 disabled:opacity-50"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
             {isInferring ? 'Scoring...' : 'Run Neural Prediction'}
@@ -185,37 +186,37 @@ export const ModelInsights: React.FC = () => {
           value={testCode}
           onChange={(e) => setTestCode(e.target.value)}
           rows={4}
-          className="input w-full font-mono leading-relaxed"
+          className="input w-full font-mono leading-relaxed min-h-[100px]"
           placeholder="Paste function or code snippet..."
         />
 
         {inferenceResult && (
-          <div className="rounded-2xl bg-white/[0.03] border border-white/[0.08] grid grid-cols-4 gap-4 p-4">
+          <div className="rounded-xl bg-gray-50 border border-gray-100 grid grid-cols-4 gap-4 p-4">
             <div>
-              <div className="text-[10px] text-gray-400 uppercase section-label">Predicted Risk Score</div>
-              <div className="text-lg font-bold font-mono text-indigo-400 mt-1">
+              <div className="section-label">Predicted Risk Score</div>
+              <div className="text-lg font-semibold font-mono text-gray-900 mt-1">
                 {Math.round(inferenceResult.risk_score * 100)}%
               </div>
             </div>
             <div>
-              <div className="text-[10px] text-gray-400 uppercase section-label">Classification</div>
+              <div className="section-label">Classification</div>
               <div
                 className={`text-sm font-bold uppercase mt-1 ${
-                  inferenceResult.risk_label === 'vulnerable' ? 'text-red-400' : 'text-emerald-400'
+                  inferenceResult.risk_label === 'vulnerable' ? 'text-red-600' : 'text-emerald-600'
                 }`}
               >
                 {inferenceResult.risk_label}
               </div>
             </div>
             <div>
-              <div className="text-[10px] text-gray-400 uppercase section-label">Inference Latency</div>
-              <div className="text-sm font-bold font-mono text-white mt-1">
+              <div className="section-label">Inference Latency</div>
+              <div className="text-sm font-semibold font-mono text-gray-900 mt-1">
                 {inferenceResult.latency_ms} ms
               </div>
             </div>
             <div>
-              <div className="text-[10px] text-gray-400 uppercase section-label">CWE Signatures</div>
-              <div className="text-xs text-amber-400 truncate mt-1">
+              <div className="section-label">CWE Signatures</div>
+              <div className="text-xs text-amber-600 truncate mt-1">
                 {inferenceResult.cwe_suggestions?.join(', ') || 'None'}
               </div>
             </div>

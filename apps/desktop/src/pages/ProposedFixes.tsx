@@ -59,7 +59,6 @@ export const ProposedFixes: React.FC = () => {
 
   const handleApprove = async () => {
     if (!selectedPatch || isLoading) return;
-    // Already applied — nothing to do
     if (selectedPatch.status === 'applied') return;
     setIsLoading(true);
     try {
@@ -102,7 +101,6 @@ export const ProposedFixes: React.FC = () => {
     }
   };
 
-  // If active investigation produced a patch, generate Diff preview if not already cached
   const invPatch = activeInvestigation?.candidate_patch;
 
   return (
@@ -110,8 +108,8 @@ export const ProposedFixes: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">Proposed Code Remediation</h1>
-          <p className="text-sm text-gray-400 font-light mt-0.5">
+          <h1 className="text-xl font-semibold text-gray-900">Proposed Code Remediation</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
             Non-negotiable human review gate: inspect unified diff and syntax verification before applying changes.
           </p>
         </div>
@@ -126,9 +124,9 @@ export const ProposedFixes: React.FC = () => {
       </div>
 
       {actionMessage && (
-        <div className="p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-300 flex items-center justify-between">
+        <div className="p-3 rounded-lg bg-blue-50 border border-blue-100 text-xs text-blue-700 flex items-center justify-between">
           <span>{actionMessage}</span>
-          <button onClick={() => setActionMessage(null)} className="text-gray-400 hover:text-white rounded-full">
+          <button onClick={() => setActionMessage(null)} className="text-blue-400 hover:text-blue-700">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -136,17 +134,17 @@ export const ProposedFixes: React.FC = () => {
 
       {/* Main Container */}
       {patches.length === 0 && !invPatch ? (
-        <div className="p-12 text-center rounded-2xl bg-[#111827] border border-white/[0.08] space-y-3">
-          <div className="w-12 h-12 rounded-full bg-indigo-500/10 flex items-center justify-center mx-auto">
+        <div className="bg-white border border-gray-200 rounded-xl p-12 text-center space-y-3">
+          <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto">
             <GitPullRequest className="w-6 h-6 text-gray-400" />
           </div>
-          <h3 className="text-base font-medium text-white">No Pending Remediation Patches</h3>
+          <h3 className="text-base font-medium text-gray-900">No Pending Remediation Patches</h3>
           <p className="text-sm text-gray-500 max-w-md mx-auto">
             Remediation patches are automatically generated when you launch an AI investigation on any security finding or performance hotspot.
           </p>
           <button
             onClick={() => setActiveTab('findings')}
-            className="btn-primary shadow-glow inline-flex items-center gap-1.5"
+            className="btn-primary inline-flex items-center gap-1.5"
           >
             <span>View Security Findings</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -163,29 +161,29 @@ export const ProposedFixes: React.FC = () => {
               <div
                 key={p.patch_id}
                 onClick={() => setSelectedPatch(p)}
-                className={`p-3 rounded-xl border cursor-pointer transition-all duration-200 ${
+                className={`p-3 rounded-xl border cursor-pointer transition-colors ${
                   selectedPatch?.patch_id === p.patch_id
-                    ? 'bg-indigo-950/30 border-indigo-500/50 ring-1 ring-indigo-500/50 shadow-glow'
-                    : 'bg-[#111827] border-white/[0.08] hover:border-white/15'
+                    ? 'bg-white border-gray-900 shadow-sm'
+                    : 'bg-white border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-white truncate max-w-[180px]">
+                  <span className="text-xs font-mono font-semibold text-gray-900 truncate max-w-[180px]">
                     {p.file_path}
                   </span>
                   <span
-                    className={`badge border text-[10px] font-semibold uppercase ${
+                    className={`badge text-[10px] border ${
                       p.status === 'applied'
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
                         : p.status === 'rejected'
-                        ? 'bg-red-500/10 text-red-400 border-red-500/20'
-                        : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'
+                        ? 'bg-red-50 text-red-700 border-red-100'
+                        : 'bg-gray-100 text-gray-600 border-gray-200'
                     }`}
                   >
                     {p.status}
                   </span>
                 </div>
-                <div className="text-[11px] text-gray-400 mt-1 line-clamp-1">
+                <div className="text-[11px] text-gray-500 mt-1">
                   +{p.diff?.additions || 0} / -{p.diff?.deletions || 0} lines
                 </div>
               </div>
@@ -195,24 +193,23 @@ export const ProposedFixes: React.FC = () => {
           {/* Active Patch Details Box */}
           <div className="col-span-8">
             {selectedPatch ? (
-              <div className="p-6 rounded-2xl bg-[#111827] border border-white/[0.08] space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-white/[0.05]">
+              <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-gray-100">
                   <div className="flex items-center gap-2">
-                    <FileCode className="w-4 h-4 text-indigo-400" />
-                    <span className="text-xs font-mono font-bold text-white">{selectedPatch.file_path}</span>
-                    <span className="badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-                      <ShieldCheck className="w-3 h-3" />
+                    <FileCode className="w-4 h-4 text-gray-400" />
+                    <span className="text-xs font-mono font-semibold text-gray-900">{selectedPatch.file_path}</span>
+                    <span className="badge bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3 text-emerald-600" />
                       AST Syntax Validated
                     </span>
                   </div>
-
-                  <span className="text-xs font-mono text-gray-400">
-                    Status: <span className="text-indigo-400 font-bold uppercase">{selectedPatch.status}</span>
+                  <span className="text-xs font-mono text-gray-500">
+                    Status: <span className="text-gray-900 font-semibold uppercase">{selectedPatch.status}</span>
                   </span>
                 </div>
 
                 {/* Diff Content Preview */}
-                <div className="p-4 bg-[#0B1020] rounded-2xl border border-white/[0.05] font-mono text-xs overflow-x-auto leading-relaxed max-h-[380px] overflow-y-auto">
+                <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl font-mono text-xs overflow-x-auto leading-relaxed max-h-[380px] overflow-y-auto">
                   {(selectedPatch.diff?.unified_diff || selectedPatch.modified_code)
                     .split('\n')
                     .map((line, idx) => {
@@ -226,12 +223,12 @@ export const ProposedFixes: React.FC = () => {
                           key={idx}
                           className={`${
                             isAdd
-                              ? 'bg-emerald-950/40 text-emerald-300'
+                              ? 'bg-emerald-50 text-emerald-800'
                               : isDel
-                              ? 'bg-red-950/40 text-red-300'
+                              ? 'bg-red-50 text-red-800'
                               : isHeader
-                              ? 'text-indigo-400 font-bold'
-                              : 'text-gray-300'
+                              ? 'text-gray-500 font-medium'
+                              : 'text-gray-700'
                           } px-2 py-0.5 rounded`}
                         >
                           {line}
@@ -241,9 +238,9 @@ export const ProposedFixes: React.FC = () => {
                 </div>
 
                 {/* Explanation */}
-                <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.08] text-xs text-gray-300 space-y-1">
-                  <div className="font-semibold text-white">Correction Rationale:</div>
-                  <p className="text-gray-400 leading-relaxed whitespace-pre-line">
+                <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 text-xs text-gray-600 space-y-1">
+                  <div className="font-semibold text-gray-900">Correction Rationale:</div>
+                  <p className="leading-relaxed whitespace-pre-line">
                     {selectedPatch.explanation}
                   </p>
                 </div>
@@ -252,8 +249,8 @@ export const ProposedFixes: React.FC = () => {
                 <div className="pt-2 flex items-center justify-between">
                   <div className="text-[11px] text-gray-400">
                     {appliedBackup && (
-                      <span className="text-emerald-400">
-                        &bull; Backup saved at: <span className="font-mono">{appliedBackup}</span>
+                      <span>
+                        &bull; Backup saved at: <span className="font-mono text-emerald-600">{appliedBackup}</span>
                       </span>
                     )}
                   </div>
@@ -262,18 +259,18 @@ export const ProposedFixes: React.FC = () => {
                     {selectedPatch.status === 'applied' ? (
                       <button
                         onClick={handleRollback}
-                        className="btn-secondary flex items-center gap-1.5 hover:text-amber-400"
+                        className="btn-secondary flex items-center gap-1.5"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
                         Rollback to Original
                       </button>
                     ) : selectedPatch.status === 'rejected' ? (
-                      <span className="text-xs text-gray-500 italic">Patch rejected — no further actions</span>
+                      <span className="text-xs text-gray-400 italic">Patch rejected — no further actions</span>
                     ) : (
                       <>
                         <button
                           onClick={handleReject}
-                          className="btn-secondary flex items-center gap-1.5 hover:text-red-400"
+                          className="btn-secondary flex items-center gap-1.5"
                         >
                           <X className="w-3.5 h-3.5" />
                           Reject Proposal
@@ -281,10 +278,10 @@ export const ProposedFixes: React.FC = () => {
                         <button
                           onClick={handleApprove}
                           disabled={isLoading}
-                          className="rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium px-5 py-2 flex items-center gap-1.5 shadow-glow-success transition-all duration-200 active:scale-95 disabled:opacity-50"
+                          className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs font-medium px-5 py-2 flex items-center gap-1.5 transition-colors disabled:opacity-50"
                         >
                           <Check className="w-3.5 h-3.5" />
-                          Approve & Apply Patch
+                          Approve &amp; Apply Patch
                         </button>
                       </>
                     )}

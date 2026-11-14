@@ -50,13 +50,21 @@ export const Reports: React.FC = () => {
     downloadAnchor.remove();
   };
 
+  const tooltipStyle = {
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
+    borderRadius: '8px',
+    color: '#111827',
+    fontSize: 11,
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">Security & Compliance Reports</h1>
-          <p className="text-sm text-gray-400 font-light mt-0.5">
+          <h1 className="text-xl font-semibold text-gray-900">Security &amp; Compliance Reports</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
             Audit-grade summaries mapped against OWASP Top 10, CWE taxonomic distributions, and artifact exports.
           </p>
         </div>
@@ -70,7 +78,7 @@ export const Reports: React.FC = () => {
           </button>
           <button
             onClick={handleExportMarkdown}
-            className="btn-primary flex items-center gap-1.5 shadow-glow"
+            className="btn-primary flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
             Export Markdown
@@ -94,15 +102,7 @@ export const Reports: React.FC = () => {
               <Cell key={i} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip
-            contentStyle={{
-              backgroundColor: '#1F2937',
-              border: 'none',
-              borderRadius: '8px',
-              color: '#fff',
-              fontSize: 11,
-            }}
-          />
+          <Tooltip contentStyle={tooltipStyle} />
         </PieChart>
       </div>
 
@@ -111,38 +111,38 @@ export const Reports: React.FC = () => {
         <div className="card space-y-3">
           <h3 className="section-label">OWASP Top 10 Mapping</h3>
           <div className="space-y-0 text-xs">
-            <div className="flex justify-between text-gray-300 py-2 border-b border-white/[0.05]">
-              <span>A01: Broken Access Control</span>
-              <span className="font-mono text-emerald-400">0 Issues</span>
+            <div className="flex justify-between py-2.5 border-b border-gray-100 text-sm">
+              <span className="text-gray-700">A01: Broken Access Control</span>
+              <span className="font-mono text-emerald-600">0 Issues</span>
             </div>
-            <div className="flex justify-between text-gray-300 py-2 border-b border-white/[0.05]">
-              <span>A02: Cryptographic Failures</span>
-              <span className="font-mono text-amber-400">1 Warning</span>
+            <div className="flex justify-between py-2.5 border-b border-gray-100 text-sm">
+              <span className="text-gray-700">A02: Cryptographic Failures</span>
+              <span className="font-mono text-amber-600">1 Warning</span>
             </div>
-            <div className="flex justify-between text-gray-300 py-2 border-b border-white/[0.05]">
-              <span>A03: Injection (SQL/Cmd)</span>
-              <span className="font-mono text-red-400">2 Critical</span>
+            <div className="flex justify-between py-2.5 border-b border-gray-100 text-sm">
+              <span className="text-gray-700">A03: Injection (SQL/Cmd)</span>
+              <span className="font-mono text-red-600">2 Critical</span>
             </div>
-            <div className="flex justify-between text-gray-300 py-2 last:border-0">
-              <span>A06: Vulnerable Components</span>
-              <span className="font-mono text-emerald-400">0 Advisories</span>
+            <div className="flex justify-between py-2.5 last:border-0 text-sm">
+              <span className="text-gray-700">A06: Vulnerable Components</span>
+              <span className="font-mono text-emerald-600">0 Advisories</span>
             </div>
           </div>
         </div>
 
         <div className="col-span-2 card">
           <h3 className="section-label mb-3">Audit Summary</h3>
-          <p className="text-xs text-gray-400 leading-relaxed">
+          <p className="text-xs text-gray-600 leading-relaxed">
             This repository has undergone local incremental static application security testing (SAST),
             secret pattern scanning, software composition analysis (SCA), and CodeBERT neural risk classification.
             All findings are preserved locally in SQLite with cryptographic fingerprints.
           </p>
           <div className="mt-4 flex items-center gap-4 text-xs">
-            <div className="flex items-center gap-1.5 text-emerald-400">
+            <div className="flex items-center gap-1.5 text-emerald-600">
               <CheckCircle2 className="w-4 h-4" />
               <span>Zero Cloud Leaks</span>
             </div>
-            <div className="flex items-center gap-1.5 text-indigo-400">
+            <div className="flex items-center gap-1.5 text-gray-700">
               <ShieldCheck className="w-4 h-4" />
               <span>Reproducible Hashes</span>
             </div>

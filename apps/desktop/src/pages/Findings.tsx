@@ -35,13 +35,13 @@ export const Findings: React.FC = () => {
   const getSeverityBadge = (sev: Severity) => {
     switch (sev) {
       case 'critical':
-        return 'bg-red-500/10 text-red-400 border-red-500/20';
+        return 'bg-red-50 text-red-700 border border-red-100';
       case 'high':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+        return 'bg-amber-50 text-amber-700 border border-amber-100';
       case 'medium':
-        return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
+        return 'bg-yellow-50 text-yellow-700 border border-yellow-100';
       default:
-        return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+        return 'bg-blue-50 text-blue-700 border border-blue-100';
     }
   };
 
@@ -72,8 +72,8 @@ export const Findings: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">Security Findings</h1>
-          <p className="text-sm text-gray-400 font-light mt-0.5">
+          <h1 className="text-xl font-semibold text-gray-900">Security Findings</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
             Normalized, correlated vulnerability findings from static analysis, secret scans, and dependency audits.
           </p>
         </div>
@@ -82,7 +82,7 @@ export const Findings: React.FC = () => {
       {/* Filter Bar */}
       <div className="flex items-center gap-3">
         <div className="flex-1 relative">
-          <Search className="w-4 h-4 text-gray-500 absolute left-3 top-3" />
+          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
           <input
             type="text"
             placeholder="Search by rule, title, or filename..."
@@ -114,58 +114,56 @@ export const Findings: React.FC = () => {
       </div>
 
       {/* Findings Table */}
-      <div className="rounded-2xl bg-[#111827] border border-white/[0.08] overflow-hidden">
+      <div className="rounded-xl bg-white border border-gray-200 overflow-hidden shadow-sm">
         <table className="w-full text-left text-xs">
-          <thead className="bg-white/[0.03] text-gray-400 border-b border-white/[0.05]">
+          <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="py-3 px-4 section-label">Severity</th>
-              <th className="py-3 px-4 section-label">Vulnerability Title</th>
-              <th className="py-3 px-4 section-label">Scanner</th>
-              <th className="py-3 px-4 section-label">Location</th>
-              <th className="py-3 px-4 section-label text-right">Actions</th>
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Severity</th>
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Vulnerability Title</th>
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Scanner</th>
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+              <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.05]">
+          <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-8 text-center text-gray-500">
+                <td colSpan={5} className="py-8 text-center text-gray-400">
                   No findings matching criteria
                 </td>
               </tr>
             ) : (
               filtered.map((f) => (
-                <tr key={f.id} className="hover:bg-white/[0.03] transition-colors">
+                <tr key={f.id} className="hover:bg-gray-50 border-b border-gray-100 transition-colors">
                   <td className="py-3 px-4">
                     <span
-                      className={`badge border uppercase tracking-wider ${getSeverityBadge(
-                        f.severity
-                      )}`}
+                      className={`badge uppercase tracking-wider ${getSeverityBadge(f.severity)}`}
                     >
                       {f.severity}
                     </span>
                   </td>
                   <td className="py-3 px-4">
-                    <div className="font-semibold text-white">{f.title}</div>
+                    <div className="text-sm font-medium text-gray-900">{f.title}</div>
                     <div className="text-[10px] text-gray-400 font-mono mt-0.5">{f.rule_id}</div>
                   </td>
                   <td className="py-3 px-4">
-                    <span className="text-gray-300">{f.scanner_name}</span>
+                    <span className="text-sm text-gray-600">{f.scanner_name}</span>
                   </td>
-                  <td className="py-3 px-4 font-mono text-[11px] text-gray-400">
+                  <td className="py-3 px-4 font-mono text-xs text-gray-500">
                     {f.file_path}:{f.line_start ?? f.start_line ?? 1}
                   </td>
                   <td className="py-3 px-4 text-right">
                     <button
                       onClick={() => setActiveFinding(f)}
-                      className="px-3 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/10 text-gray-300 hover:text-white transition-all duration-200 mr-2 text-xs"
+                      className="px-3 py-1 rounded-lg bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 text-xs mr-2 transition-colors"
                     >
                       Details
                     </button>
                     <button
                       onClick={() => handleStartInvestigation(f)}
-                      className="px-3 py-1.5 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-glow transition-all duration-200 text-xs"
+                      className="px-3 py-1 rounded-lg bg-gray-900 hover:bg-gray-800 text-white text-xs transition-colors"
                     >
-                      Investigate AI
+                      Investigate
                     </button>
                   </td>
                 </tr>
@@ -177,23 +175,21 @@ export const Findings: React.FC = () => {
 
       {/* Details Slide-over modal */}
       {activeFinding && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-end z-50">
-          <div className="w-full max-w-xl bg-[#0d1428]/95 backdrop-blur-xl h-full p-6 border-l border-white/[0.08] flex flex-col justify-between overflow-y-auto">
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex justify-end z-50">
+          <div className="w-full max-w-xl bg-white border-l border-gray-200 h-full p-6 flex flex-col justify-between overflow-y-auto">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-white/[0.05]">
+              <div className="flex items-center justify-between pb-4 border-b border-gray-100">
                 <div>
                   <span
-                    className={`badge border uppercase ${getSeverityBadge(
-                      activeFinding.severity
-                    )}`}
+                    className={`badge uppercase ${getSeverityBadge(activeFinding.severity)}`}
                   >
                     {activeFinding.severity}
                   </span>
-                  <h2 className="text-base font-bold text-white mt-2">{activeFinding.title}</h2>
+                  <h2 className="text-base font-semibold text-gray-900 mt-2">{activeFinding.title}</h2>
                 </div>
                 <button
                   onClick={() => setActiveFinding(null)}
-                  className="p-1 rounded-full text-gray-400 hover:text-white hover:bg-white/5"
+                  className="p-1 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -201,27 +197,27 @@ export const Findings: React.FC = () => {
 
               <div className="space-y-4 mt-6">
                 <div>
-                  <div className="text-xs font-semibold text-gray-300 mb-1">Description</div>
-                  <p className="text-xs text-gray-400 leading-relaxed">{activeFinding.description}</p>
+                  <div className="text-xs font-medium text-gray-700 mb-1">Description</div>
+                  <p className="text-xs text-gray-600 leading-relaxed">{activeFinding.description}</p>
                 </div>
 
                 <div>
-                  <div className="text-xs font-semibold text-gray-300 mb-1">Code Snippet</div>
-                  <div className="p-3 bg-[#0B1020] rounded-2xl border border-white/[0.05] font-mono text-xs text-gray-200 overflow-x-auto">
+                  <div className="text-xs font-medium text-gray-700 mb-1">Code Snippet</div>
+                  <div className="p-3 bg-gray-50 rounded-xl border border-gray-200 font-mono text-xs text-gray-700 overflow-x-auto">
                     <pre>{activeFinding.code_snippet || activeFinding.snippet || 'No code preview available'}</pre>
                   </div>
                 </div>
 
                 <div>
-                  <div className="text-xs font-semibold text-gray-300 mb-1">Recommendation</div>
-                  <p className="text-xs text-indigo-300 bg-indigo-950/20 p-3 rounded-2xl border border-indigo-500/20">
+                  <div className="text-xs font-medium text-gray-700 mb-1">Recommendation</div>
+                  <p className="text-xs text-gray-700 bg-gray-50 p-3 rounded-xl border border-gray-200">
                     {activeFinding.recommendation || 'Apply parameterized execution or sanitized inputs.'}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="pt-6 border-t border-white/[0.05] flex items-center justify-end gap-3">
+            <div className="pt-6 border-t border-gray-100 flex items-center justify-end gap-3">
               <button
                 onClick={() => setActiveFinding(null)}
                 className="btn-secondary"
@@ -234,7 +230,7 @@ export const Findings: React.FC = () => {
                   setActiveFinding(null);
                   handleStartInvestigation(f);
                 }}
-                className="btn-primary shadow-glow"
+                className="btn-primary"
               >
                 Launch Multi-Agent Investigation
               </button>
