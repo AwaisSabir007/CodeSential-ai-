@@ -89,7 +89,9 @@ def safe_relative_path(base: Path, target: Path) -> Optional[str]:
         base_resolved = base.resolve()
         target_resolved = target.resolve()
         rel = target_resolved.relative_to(base_resolved)
-        return str(rel)
+        # Always use forward slashes so finding paths are consistent across
+        # platforms (display, fingerprints, and stored records must match).
+        return rel.as_posix()
     except ValueError:
         return None
 
